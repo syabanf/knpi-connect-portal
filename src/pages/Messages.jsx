@@ -25,18 +25,28 @@ export default function Messages() {
   const [sending, setSending] = useState(false);
 
   useEffect(() => {
-    if (user?.email) loadMessages();
-    base44.entities.Member.list('full_name', 200).then(setMembers).catch(() => []);
+    if (user?.email) {
+      loadMessages().catch(() => {
+        setMessages([]);
+        setLoading(false);
+      });
+      base44.entities.Member.list('full_name', 200).then(setMembers).catch(() => setMembers([]));
+    } else {
+      setLoading(false);
+    }
   }, [user]);
 
   const loadMessages = async () => {
-    const [inbox, sent] = await Promise.all([
-      base44.entities.Message.filter({ recipient_email: user.email }, '-created_date', 200),
-      base44.entities.Message.filter({ sender_email: user.email }, '-created_date', 200),
-    ]);
-    const all = [...inbox, ...sent].sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
-    setMessages(all);
-    setLoading(false);
+    try {
+      const [inbox, sent] = await Promise.all([
+        base44.entities.Message.filter({ recipient_email: user.email }, '-created_date', 200).catch(() => []),
+        base44.entities.Message.filter({ sender_email: user.email }, '-created_date', 200).catch(() => []),
+      ]);
+      const all = [...inbox, ...sent].sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
+      setMessages(all);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Group into threads
