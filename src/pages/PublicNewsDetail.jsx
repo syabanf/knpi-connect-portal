@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { ArrowLeft, Calendar, Tag } from "lucide-react";
 import CommentSection from "@/components/shared/CommentSection";
+import PublicNavbar from "@/components/shared/PublicNavbar";
 import { Button } from "@/components/ui/button";
 import StatusBadge from "@/components/shared/StatusBadge";
 
@@ -39,17 +40,7 @@ export default function PublicNewsDetail() {
 
   return (
     <div className="min-h-screen bg-gray-50 font-body">
-      <header className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <a href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-              <span className="text-white font-heading font-bold text-sm">K</span>
-            </div>
-            <span className="font-heading font-bold text-gray-900">KNPI Connect</span>
-          </a>
-          <Button onClick={handleLogin} size="sm" className="font-semibold">Member Portal</Button>
-        </div>
-      </header>
+      <PublicNavbar />
 
       <div className="relative h-64 sm:h-80 overflow-hidden">
         <img src={item.image_url || imgSrc} alt={item.title} className="w-full h-full object-cover" />
