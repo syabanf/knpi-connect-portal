@@ -43,6 +43,16 @@ Deno.serve(async (req) => {
       { title: "Board Meeting Minutes - Feb 2026", description: "Official minutes from February board meeting", category: "minutes", file_url: "https://via.placeholder.com/500x700?text=Board+Minutes", file_type: "PDF", file_size: "0.9 MB", access_level: "admin", audience: "all", download_count: 45 },
     ];
 
+    // Sample Messages
+    const messages = [
+      { sender_email: "ahmad@knpi.org", sender_name: "Ahmad Wijaya", recipient_email: "siti@knpi.org", recipient_name: "Siti Nurhaliza", subject: "Conference Planning Discussion", body: "Hi Siti, I wanted to discuss the logistics for the upcoming conference. Do you have time for a call this week?", is_read: true, thread_id: "thread_001" },
+      { sender_email: "siti@knpi.org", sender_name: "Siti Nurhaliza", recipient_email: "ahmad@knpi.org", recipient_name: "Ahmad Wijaya", subject: "Re: Conference Planning Discussion", body: "Hi Ahmad, I'm available Thursday afternoon. Let's discuss the venue capacity and catering options.", is_read: true, thread_id: "thread_001" },
+      { sender_email: "budi@knpi.org", sender_name: "Budi Santoso", recipient_email: "ahmad@knpi.org", recipient_name: "Ahmad Wijaya", subject: "Update on Membership Drive", body: "Ahmad, we've successfully enrolled 45 new members this month. The engagement rate is higher than expected!", is_read: false, thread_id: "thread_002" },
+      { sender_email: "rina@knpi.org", sender_name: "Rina Handoko", recipient_email: "ahmad@knpi.org", recipient_name: "Ahmad Wijaya", subject: "Financial Report - Q1 2026", body: "Here's the financial summary for Q1. Overall, we're within budget. Please review the attached details.", is_read: true, thread_id: "thread_003" },
+      { sender_email: "dewi@knpi.org", sender_name: "Dewi Lestari", recipient_email: "siti@knpi.org", recipient_name: "Siti Nurhaliza", subject: "Board Member Workshop Feedback", body: "Thank you for organizing the leadership workshop. The content was very valuable and the participants gave positive feedback.", is_read: false, thread_id: "thread_004" },
+      { sender_email: "siti@knpi.org", sender_name: "Siti Nurhaliza", recipient_email: "dewi@knpi.org", recipient_name: "Dewi Lestari", subject: "Re: Board Member Workshop Feedback", body: "Thanks Dewi! I'm glad it went well. We're planning a follow-up session for April. Would you be interested in facilitating a segment?", is_read: true, thread_id: "thread_004" },
+    ];
+
     // Sample Service Requests
     const requests = [
       { title: "Certificate of Membership", description: "Requesting official membership certificate", type: "certificate", status: "completed", priority: "medium", requester_name: "Ahmad Wijaya", requester_email: "ahmad@knpi.org", resolved_date: "2026-03-15T10:30:00Z" },
@@ -53,12 +63,13 @@ Deno.serve(async (req) => {
     ];
 
     // Bulk create
-    const [createdMembers, createdEvents, createdAnnouncements, createdDocuments, createdRequests] = await Promise.all([
+    const [createdMembers, createdEvents, createdAnnouncements, createdDocuments, createdRequests, createdMessages] = await Promise.all([
       base44.asServiceRole.entities.Member.bulkCreate(members),
       base44.asServiceRole.entities.Event.bulkCreate(events),
       base44.asServiceRole.entities.Announcement.bulkCreate(announcements),
       base44.asServiceRole.entities.Document.bulkCreate(documents),
       base44.asServiceRole.entities.ServiceRequest.bulkCreate(requests),
+      base44.asServiceRole.entities.Message.bulkCreate(messages),
     ]);
 
     return Response.json({
@@ -70,6 +81,7 @@ Deno.serve(async (req) => {
         announcements: createdAnnouncements.length,
         documents: createdDocuments.length,
         requests: createdRequests.length,
+        messages: createdMessages.length,
       }
     });
   } catch (error) {
