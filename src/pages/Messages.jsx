@@ -66,20 +66,29 @@ export default function Messages() {
   );
 
   const handleCompose = async () => {
-    if (!form.recipient_email || !form.subject || !form.body) { toast.error("All fields required"); return; }
+    if (!form.recipient_email) { toast.error("Please select a recipient"); return; }
+    if (!form.subject.trim()) { toast.error("Subject is required"); return; }
+    if (!form.body.trim()) { toast.error("Message is required"); return; }
     setSending(true);
     try {
-      const msg = await base44.entities.Message.create({
-        ...form,
+      await base44.entities.Message.create({
         sender_email: user.email,
         sender_name: user.full_name,
+        recipient_email: form.recipient_email,
+        recipient_name: form.recipient_name,
+        subject: form.subject,
+        body: form.body,
         is_read: false,
       });
       toast.success("Message sent!");
       setComposeOpen(false);
       setForm({ recipient_email: "", recipient_name: "", subject: "", body: "" });
+      setMemberSearch("");
       await loadMessages();
-    } catch { toast.error("Failed to send."); }
+    } catch (e) { 
+      console.error("Send error:", e);
+      toast.error("Failed to send."); 
+    }
     setSending(false);
   };
 
