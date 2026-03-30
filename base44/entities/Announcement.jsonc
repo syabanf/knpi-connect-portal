@@ -45,6 +45,38 @@
     "image_url": {
       "type": "string",
       "title": "Image URL"
+    },
+    "target_audience": {
+      "type": "string",
+      "enum": [
+        "all",
+        "branch",
+        "position",
+        "specific"
+      ],
+      "title": "Target Audience",
+      "default": "all"
+    },
+    "target_branches": {
+      "type": "array",
+      "title": "Target Branches",
+      "items": {
+        "type": "string"
+      }
+    },
+    "target_positions": {
+      "type": "array",
+      "title": "Target Positions",
+      "items": {
+        "type": "string"
+      }
+    },
+    "target_emails": {
+      "type": "array",
+      "title": "Target Specific Members (emails)",
+      "items": {
+        "type": "string"
+      }
     }
   },
   "required": [

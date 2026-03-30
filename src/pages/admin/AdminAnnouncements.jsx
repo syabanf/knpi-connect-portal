@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { Megaphone, Plus, Edit, Trash2, Search } from "lucide-react";
+import { Megaphone, Plus, Edit, Trash2, Search, Users } from "lucide-react";
+import AudiencePicker from "@/components/shared/AudiencePicker";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,7 +21,7 @@ export default function AdminAnnouncements() {
   const [search, setSearch] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
-  const [form, setForm] = useState({ title: "", content: "", category: "general", priority: "medium", is_pinned: false, published: true });
+  const [form, setForm] = useState({ title: "", content: "", category: "general", priority: "medium", is_pinned: false, published: true, target_audience: "all", target_branches: [], target_positions: [], target_emails: [] });
 
   useEffect(() => { loadItems(); }, []);
 
@@ -55,7 +56,7 @@ export default function AdminAnnouncements() {
   const resetDialog = () => {
     setDialogOpen(false);
     setEditingItem(null);
-    setForm({ title: "", content: "", category: "general", priority: "medium", is_pinned: false, published: true });
+    setForm({ title: "", content: "", category: "general", priority: "medium", is_pinned: false, published: true, target_audience: "all", target_branches: [], target_positions: [], target_emails: [] });
   };
 
   const openEdit = (item) => {
@@ -108,6 +109,11 @@ export default function AdminAnnouncements() {
                   </Select>
                 </div>
               </div>
+              <AudiencePicker
+                mode="announcement"
+                value={form}
+                onChange={patch => setForm(prev => ({ ...prev, ...patch }))}
+              />
               <div className="flex items-center gap-6">
                 <div className="flex items-center gap-2"><Switch checked={form.is_pinned} onCheckedChange={v => setForm({ ...form, is_pinned: v })} /><Label>Pinned</Label></div>
                 <div className="flex items-center gap-2"><Switch checked={form.published} onCheckedChange={v => setForm({ ...form, published: v })} /><Label>Published</Label></div>
@@ -139,10 +145,13 @@ export default function AdminAnnouncements() {
               {filtered.map(a => (
                 <TableRow key={a.id}>
                   <TableCell>
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium">{a.title}</span>
-                      {a.is_pinned && <span className="text-[10px] bg-knpi-maroon text-white px-1.5 py-0.5 rounded-full font-bold">PIN</span>}
-                    </div>
+                   <div className="flex items-center gap-2">
+                     <span className="font-medium">{a.title}</span>
+                     {a.is_pinned && <span className="text-[10px] bg-knpi-maroon text-white px-1.5 py-0.5 rounded-full font-bold">PIN</span>}
+                     {a.target_audience && a.target_audience !== "all" && (
+                       <span className="text-[10px] bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full font-bold flex items-center gap-0.5"><Users className="w-2.5 h-2.5" />{a.target_audience}</span>
+                     )}
+                   </div>
                   </TableCell>
                   <TableCell><StatusBadge status={a.category} /></TableCell>
                   <TableCell className="hidden sm:table-cell"><StatusBadge status={a.priority} /></TableCell>

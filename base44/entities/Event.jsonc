@@ -68,6 +68,30 @@
     "organizer": {
       "type": "string",
       "title": "Organizer"
+    },
+    "audience": {
+      "type": "string",
+      "enum": [
+        "all",
+        "branch",
+        "position"
+      ],
+      "title": "Audience",
+      "default": "all"
+    },
+    "audience_branches": {
+      "type": "array",
+      "title": "Target Branches",
+      "items": {
+        "type": "string"
+      }
+    },
+    "audience_positions": {
+      "type": "array",
+      "title": "Target Positions",
+      "items": {
+        "type": "string"
+      }
     }
   },
   "required": [

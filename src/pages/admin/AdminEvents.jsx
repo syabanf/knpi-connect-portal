@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Calendar, Plus, Edit, Trash2, Search, Users } from "lucide-react";
+import AudiencePicker from "@/components/shared/AudiencePicker";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,7 +21,7 @@ export default function AdminEvents() {
   const [search, setSearch] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState(null);
-  const [form, setForm] = useState({ title: "", description: "", date: "", location: "", type: "seminar", status: "upcoming", capacity: "", is_featured: false });
+  const [form, setForm] = useState({ title: "", description: "", date: "", location: "", type: "seminar", status: "upcoming", capacity: "", is_featured: false, audience: "all", audience_branches: [], audience_positions: [] });
 
   useEffect(() => { loadEvents(); }, []);
 
@@ -56,7 +57,7 @@ export default function AdminEvents() {
   const resetDialog = () => {
     setDialogOpen(false);
     setEditingEvent(null);
-    setForm({ title: "", description: "", date: "", location: "", type: "seminar", status: "upcoming", capacity: "", is_featured: false });
+    setForm({ title: "", description: "", date: "", location: "", type: "seminar", status: "upcoming", capacity: "", is_featured: false, audience: "all", audience_branches: [], audience_positions: [] });
   };
 
   const openEdit = (evt) => {
@@ -114,6 +115,11 @@ export default function AdminEvents() {
               </div>
               <div><Label>Capacity</Label><Input type="number" value={form.capacity} onChange={e => setForm({ ...form, capacity: e.target.value })} placeholder="Leave empty for unlimited" /></div>
               <div><Label>Description</Label><Textarea value={form.description || ""} onChange={e => setForm({ ...form, description: e.target.value })} rows={3} /></div>
+              <AudiencePicker
+                mode="event"
+                value={form}
+                onChange={patch => setForm(prev => ({ ...prev, ...patch }))}
+              />
               <div className="flex items-center gap-3">
                 <Switch checked={form.is_featured} onCheckedChange={v => setForm({ ...form, is_featured: v })} />
                 <Label>Featured Event</Label>
@@ -145,10 +151,13 @@ export default function AdminEvents() {
               {filtered.map(e => (
                 <TableRow key={e.id}>
                   <TableCell>
-                    <div>
-                      <span className="font-medium">{e.title}</span>
-                      {e.is_featured && <span className="ml-2 text-[10px] bg-knpi-yellow text-knpi-dark px-1.5 py-0.5 rounded-full font-bold">FEATURED</span>}
-                    </div>
+                   <div>
+                     <span className="font-medium">{e.title}</span>
+                     {e.is_featured && <span className="ml-2 text-[10px] bg-knpi-yellow text-knpi-dark px-1.5 py-0.5 rounded-full font-bold">FEATURED</span>}
+                     {e.audience && e.audience !== "all" && (
+                       <span className="ml-1 text-[10px] bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full font-bold">{e.audience}</span>
+                     )}
+                   </div>
                   </TableCell>
                   <TableCell className="hidden md:table-cell text-muted-foreground text-sm">
                     {e.date && new Date(e.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
