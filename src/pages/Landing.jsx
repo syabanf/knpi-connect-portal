@@ -265,7 +265,7 @@ export default function Landing() {
               <h2 className="text-4xl font-heading font-extrabold text-gray-900 mt-2">Upcoming Events</h2>
               <p className="text-gray-500 mt-3">Don't miss out on these transformative opportunities</p>
             </div>
-            <button onClick={handleLogin} className="hidden sm:flex items-center gap-2 text-primary font-semibold text-sm hover:underline">
+            <button onClick={() => handleEnter('user')} className="hidden sm:flex items-center gap-2 text-primary font-semibold text-sm hover:underline">
               View all events <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -316,7 +316,7 @@ export default function Landing() {
               <h2 className="text-4xl font-heading font-extrabold text-gray-900 mt-2">Latest News</h2>
               <p className="text-gray-500 mt-3">Official announcements and updates from KNPI</p>
             </div>
-            <button onClick={handleLogin} className="hidden sm:flex items-center gap-2 text-primary font-semibold text-sm hover:underline">
+            <button onClick={() => handleEnter('user')} className="hidden sm:flex items-center gap-2 text-primary font-semibold text-sm hover:underline">
               All announcements <ArrowRight className="w-4 h-4" />
             </button>
           </div>
