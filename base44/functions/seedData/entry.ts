@@ -62,14 +62,68 @@ Deno.serve(async (req) => {
       { title: "Official Letter Request", description: "Need official letter for employer verification", type: "letter", status: "completed", priority: "high", requester_name: "Dewi Lestari", requester_email: "dewi@knpi.org", resolved_date: "2026-03-20T14:00:00Z" },
     ];
 
-    // Bulk create
-    const [createdMembers, createdEvents, createdAnnouncements, createdDocuments, createdRequests, createdMessages] = await Promise.all([
+    // Sample Communities
+    const communities = [
+      { name: "Tech & Innovation Hub", description: "Connect with tech-savvy KNPI members interested in innovation and digital transformation", category: "professional", image_url: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=80", status: "active", is_public: true },
+      { name: "Social Entrepreneurs Network", description: "For members passionate about social entrepreneurship and sustainable business practices", category: "professional", image_url: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=80", status: "active", is_public: true },
+      { name: "Environmental & Sustainability", description: "Dedicated to environmental conservation and sustainable development initiatives", category: "learning", image_url: "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=600&q=80", status: "active", is_public: true },
+      { name: "Arts & Culture Circle", description: "Celebrating Indonesian arts, culture, and creative expressions", category: "hobby", image_url: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&q=80", status: "active", is_public: true },
+      { name: "Sports & Wellness Group", description: "Promote health, fitness, and sports activities among KNPI members", category: "hobby", image_url: "https://images.unsplash.com/photo-1552821206-5a5d10d59e1d?w=600&q=80", status: "active", is_public: true },
+      { name: "Mental Health & Wellness", description: "Support group for mental health awareness and wellbeing", category: "support", image_url: "https://images.unsplash.com/photo-1516321318423-f06f70a504f9?w=600&q=80", status: "active", is_public: true },
+    ];
+
+    // Sample Community Members (for the first 3 communities)
+    const communityMembers = [
+      // Tech & Innovation Hub
+      { community_id: "", member_email: "ahmad@knpi.org", member_name: "Ahmad Wijaya", role: "admin", joined_date: "2026-01-10T08:00:00Z", status: "active" },
+      { community_id: "", member_email: "siti@knpi.org", member_name: "Siti Nurhaliza", role: "moderator", joined_date: "2026-01-15T08:00:00Z", status: "active" },
+      { community_id: "", member_email: "budi@knpi.org", member_name: "Budi Santoso", role: "member", joined_date: "2026-01-20T08:00:00Z", status: "active" },
+      // Social Entrepreneurs Network
+      { community_id: "", member_email: "siti@knpi.org", member_name: "Siti Nurhaliza", role: "admin", joined_date: "2026-02-01T08:00:00Z", status: "active" },
+      { community_id: "", member_email: "rina@knpi.org", member_name: "Rina Handoko", role: "member", joined_date: "2026-02-05T08:00:00Z", status: "active" },
+      // Environmental & Sustainability
+      { community_id: "", member_email: "dewi@knpi.org", member_name: "Dewi Lestari", role: "admin", joined_date: "2026-02-10T08:00:00Z", status: "active" },
+      { community_id: "", member_email: "budi@knpi.org", member_name: "Budi Santoso", role: "member", joined_date: "2026-02-15T08:00:00Z", status: "active" },
+    ];
+
+    // Sample Community Events (for the first 2 communities)
+    const communityEvents = [
+      // Tech & Innovation Hub events
+      { community_id: "", title: "AI & Machine Learning Workshop", description: "Learn practical applications of AI in modern business", date: "2026-04-15T14:00:00Z", end_date: "2026-04-15T17:00:00Z", location: "Jakarta Tech Park", image_url: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=80", status: "upcoming", capacity: 50, registered_count: 32 },
+      { community_id: "", title: "Digital Transformation Panel Discussion", description: "Industry experts discuss digital transformation strategies", date: "2026-04-22T10:00:00Z", end_date: "2026-04-22T12:00:00Z", location: "Online", status: "upcoming", capacity: 100, registered_count: 67 },
+      // Social Entrepreneurs Network events
+      { community_id: "", title: "Startup Pitch Competition", description: "Showcase your startup ideas and win prizes", date: "2026-05-01T09:00:00Z", end_date: "2026-05-01T17:00:00Z", location: "Jakarta Business Hub", image_url: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=80", status: "upcoming", capacity: 30, registered_count: 18 },
+      { community_id: "", title: "Sustainable Business Models Webinar", description: "Explore profitable and sustainable business models", date: "2026-04-28T19:00:00Z", end_date: "2026-04-28T21:00:00Z", location: "Online", status: "upcoming", capacity: 200, registered_count: 145 },
+    ];
+
+    // Bulk create communities first
+    const createdCommunities = await base44.asServiceRole.entities.Community.bulkCreate(communities);
+    
+    // Update community member community_ids
+    communityMembers[0].community_id = createdCommunities[0].id;
+    communityMembers[1].community_id = createdCommunities[0].id;
+    communityMembers[2].community_id = createdCommunities[0].id;
+    communityMembers[3].community_id = createdCommunities[1].id;
+    communityMembers[4].community_id = createdCommunities[1].id;
+    communityMembers[5].community_id = createdCommunities[2].id;
+    communityMembers[6].community_id = createdCommunities[2].id;
+    
+    // Update community event community_ids
+    communityEvents[0].community_id = createdCommunities[0].id;
+    communityEvents[1].community_id = createdCommunities[0].id;
+    communityEvents[2].community_id = createdCommunities[1].id;
+    communityEvents[3].community_id = createdCommunities[1].id;
+
+    // Bulk create all entities
+    const [createdMembers, createdEvents, createdAnnouncements, createdDocuments, createdRequests, createdMessages, createdCommunityMembers, createdCommunityEvents] = await Promise.all([
       base44.asServiceRole.entities.Member.bulkCreate(members),
       base44.asServiceRole.entities.Event.bulkCreate(events),
       base44.asServiceRole.entities.Announcement.bulkCreate(announcements),
       base44.asServiceRole.entities.Document.bulkCreate(documents),
       base44.asServiceRole.entities.ServiceRequest.bulkCreate(requests),
       base44.asServiceRole.entities.Message.bulkCreate(messages),
+      base44.asServiceRole.entities.CommunityMember.bulkCreate(communityMembers),
+      base44.asServiceRole.entities.CommunityEvent.bulkCreate(communityEvents),
     ]);
 
     return Response.json({
@@ -82,6 +136,9 @@ Deno.serve(async (req) => {
         documents: createdDocuments.length,
         requests: createdRequests.length,
         messages: createdMessages.length,
+        communities: createdCommunities.length,
+        communityMembers: createdCommunityMembers.length,
+        communityEvents: createdCommunityEvents.length,
       }
     });
   } catch (error) {
