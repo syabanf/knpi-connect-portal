@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Calendar, FileText, Users, Megaphone, ArrowRight, ChevronRight, Star, MapPin, Globe, Award, TrendingUp, Shield, Phone, Mail, Menu, X } from "lucide-react";
+import { Calendar, FileText, Users, Megaphone, ArrowRight, ChevronRight, Star, MapPin, Globe, Award, TrendingUp, Shield, Phone, Mail, Menu, X, Users2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
@@ -58,6 +58,7 @@ export default function Landing() {
   const navigate = useNavigate();
   const [announcements, setAnnouncements] = useState([]);
   const [events, setEvents] = useState([]);
+  const [communities, setCommunities] = useState([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -65,6 +66,8 @@ export default function Landing() {
       .then(setAnnouncements).catch(() => {});
     base44.entities.Event.filter({ status: 'upcoming' }, 'date', 4)
       .then(setEvents).catch(() => {});
+    base44.entities.Community.filter({ status: 'active' }, '-created_date', 3)
+      .then(setCommunities).catch(() => {});
   }, []);
 
   const handleEnter = (role) => {
@@ -88,6 +91,7 @@ export default function Landing() {
             <a href="#about" className="hover:text-primary transition-colors">About</a>
             <a href="#programs" className="hover:text-primary transition-colors">Programs</a>
             <a href="#events" className="hover:text-primary transition-colors">Events</a>
+            <a href="#communities" className="hover:text-primary transition-colors">Communities</a>
             <a href="#news" className="hover:text-primary transition-colors">News</a>
             <a href="#contact" className="hover:text-primary transition-colors">Contact</a>
           </nav>
@@ -108,6 +112,7 @@ export default function Landing() {
             <a href="#about" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sm font-medium text-gray-600">About</a>
             <a href="#programs" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sm font-medium text-gray-600">Programs</a>
             <a href="#events" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sm font-medium text-gray-600">Events</a>
+            <a href="#communities" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sm font-medium text-gray-600">Communities</a>
             <a href="#news" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sm font-medium text-gray-600">News</a>
             <div className="flex flex-col gap-2 mt-2">
               <Button onClick={() => handleEnter('user')} className="w-full font-semibold">Member Portal</Button>
@@ -306,8 +311,56 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Communities */}
+      <section id="communities" className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-end justify-between mb-14">
+            <div>
+              <span className="text-primary font-semibold text-sm uppercase tracking-wider">Connect & Collaborate</span>
+              <h2 className="text-4xl font-heading font-extrabold text-gray-900 mt-2">Featured Communities</h2>
+              <p className="text-gray-500 mt-3">Join communities that match your interests and passions</p>
+            </div>
+            <button onClick={() => handleEnter('user')} className="hidden sm:flex items-center gap-2 text-primary font-semibold text-sm hover:underline">
+              Explore all <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+          {communities.length > 0 ? (
+            <div className="grid md:grid-cols-3 gap-8">
+              {communities.map((c, i) => (
+                <motion.div key={c.id} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i}>
+                  <div className="group block w-full bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                    {c.image_url && (
+                      <div className="relative h-40 overflow-hidden">
+                        <img
+                          src={c.image_url}
+                          alt={c.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                      </div>
+                    )}
+                    <div className="p-5">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Users2 className="w-4 h-4 text-primary" />
+                        <span className="text-xs font-semibold text-primary uppercase">{c.category}</span>
+                      </div>
+                      <h3 className="font-heading font-bold text-gray-900 line-clamp-2 group-hover:text-primary transition-colors">{c.name}</h3>
+                      <p className="text-sm text-gray-500 mt-2 line-clamp-2">{c.description}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div className="bg-gray-50 rounded-2xl border border-gray-100 p-12 text-center text-gray-400">
+              <Users2 className="w-10 h-10 mx-auto mb-3 opacity-30" />
+              <p>No communities available yet</p>
+            </div>
+          )}
+        </div>
+      </section>
+
       {/* Latest News */}
-      <section id="news" className="py-24 bg-white">
+      <section id="news" className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-14">
             <div>
