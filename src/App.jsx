@@ -9,6 +9,10 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 // Layout
 import DashboardLayout from './components/layout/DashboardLayout';
 
+// Public Pages
+import PublicEventDetail from './pages/PublicEventDetail';
+import PublicNewsDetail from './pages/PublicNewsDetail';
+
 // Pages
 import Landing from './pages/Landing';
 import MemberDashboard from './pages/MemberDashboard';
@@ -52,6 +56,8 @@ const AuthenticatedApp = () => {
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
+      <Route path="/event/:id" element={<PublicEventDetail />} />
+      <Route path="/news/:id" element={<PublicNewsDetail />} />
       <Route element={<DashboardLayout />}>
         <Route path="/dashboard" element={<MemberDashboard />} />
         <Route path="/events" element={<EventList />} />
