@@ -19,6 +19,14 @@
       "type": "string",
       "title": "Member ID"
     },
+    "position": {
+      "type": "string",
+      "title": "Position"
+    },
+    "branch": {
+      "type": "string",
+      "title": "Branch / Chapter"
+    },
     "status": {
       "type": "string",
       "enum": [

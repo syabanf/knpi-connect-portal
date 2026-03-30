@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { ClipboardList, Search, MessageSquare } from "lucide-react";
+import { ClipboardList, Search, MessageSquare, LayoutGrid, List } from "lucide-react";
+import RequestsKanban from "@/components/requests/RequestsKanban";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,6 +22,7 @@ export default function AdminRequests() {
   const [selectedReq, setSelectedReq] = useState(null);
   const [adminNotes, setAdminNotes] = useState("");
   const [newStatus, setNewStatus] = useState("");
+  const [viewMode, setViewMode] = useState("kanban");
 
   useEffect(() => { loadRequests(); }, []);
 
@@ -57,7 +59,12 @@ export default function AdminRequests() {
 
   return (
     <div>
-      <PageHeader title="Manage Requests" description={`${requests.length} total requests`} />
+      <PageHeader title="Manage Requests" description={`${requests.length} total requests`}>
+        <div className="flex gap-1 border rounded-lg p-0.5">
+          <button onClick={() => setViewMode('kanban')} className={`p-1.5 rounded ${viewMode === 'kanban' ? 'bg-primary text-white' : 'hover:bg-muted'}`}><LayoutGrid className="w-4 h-4" /></button>
+          <button onClick={() => setViewMode('list')} className={`p-1.5 rounded ${viewMode === 'list' ? 'bg-primary text-white' : 'hover:bg-muted'}`}><List className="w-4 h-4" /></button>
+        </div>
+      </PageHeader>
 
       <div className="flex flex-col sm:flex-row gap-3 mb-4">
         <div className="relative flex-1">
@@ -77,7 +84,9 @@ export default function AdminRequests() {
         </Select>
       </div>
 
-      {filtered.length > 0 ? (
+      {viewMode === 'kanban' ? (
+        <RequestsKanban requests={filtered} onUpdate={loadRequests} adminMode={true} />
+      ) : filtered.length > 0 ? (
         <div className="bg-card rounded-xl border border-border overflow-hidden">
           <Table>
             <TableHeader>

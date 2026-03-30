@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
-import { ClipboardList, Plus, Send, Eye, X as XIcon } from "lucide-react";
+import { ClipboardList, Plus, Send, Eye, X as XIcon, LayoutGrid, List } from "lucide-react";
+import RequestsKanban from "@/components/requests/RequestsKanban";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,6 +21,7 @@ export default function Requests() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [detailRequest, setDetailRequest] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  const [viewMode, setViewMode] = useState("kanban");
   const [form, setForm] = useState({ title: "", description: "", type: "certificate", priority: "medium" });
 
   useEffect(() => {
@@ -52,6 +54,10 @@ export default function Requests() {
   return (
     <div>
       <PageHeader title="Service Requests" description="Submit and track your service requests">
+        <div className="flex gap-1 border rounded-lg p-0.5">
+          <button onClick={() => setViewMode('kanban')} className={`p-1.5 rounded ${viewMode === 'kanban' ? 'bg-primary text-white' : 'hover:bg-muted'}`}><LayoutGrid className="w-4 h-4" /></button>
+          <button onClick={() => setViewMode('list')} className={`p-1.5 rounded ${viewMode === 'list' ? 'bg-primary text-white' : 'hover:bg-muted'}`}><List className="w-4 h-4" /></button>
+        </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
             <Button className="font-semibold"><Plus className="w-4 h-4 mr-2" /> New Request</Button>
@@ -137,7 +143,9 @@ export default function Requests() {
         </div>
       )}
 
-      {requests.length > 0 ? (
+      {viewMode === 'kanban' ? (
+        <RequestsKanban requests={requests} onUpdate={() => base44.entities.ServiceRequest.list('-created_date', 50).then(setRequests)} />
+      ) : requests.length > 0 ? (
         <div className="space-y-3">
           {requests.map(r => (
             <div key={r.id} className="bg-card rounded-xl border border-border p-5 hover:shadow-sm transition-all cursor-pointer" onClick={() => setDetailRequest(r)}>

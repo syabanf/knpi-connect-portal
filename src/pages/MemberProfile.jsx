@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
-import { User, Mail, Phone, MapPin, Building, Briefcase, Edit, Save, X, Calendar, Hash, Star } from "lucide-react";
+import { User, Mail, Phone, MapPin, Building, Briefcase, Edit, Save, X, Calendar, Hash, Star, GitBranch } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -111,6 +111,8 @@ export default function MemberProfile() {
                 </Select>
               </div>
               <div><Label>Join Date</Label><Input value={form.join_date || ""} onChange={e => setForm({ ...form, join_date: e.target.value })} type="date" /></div>
+              <div><Label>Position</Label><Input value={form.position || ""} onChange={e => setForm({ ...form, position: e.target.value })} placeholder="e.g. Secretary" /></div>
+              <div><Label>Branch / Chapter</Label><Input value={form.branch || ""} onChange={e => setForm({ ...form, branch: e.target.value })} placeholder="e.g. DKI Jakarta" /></div>
               <div><Label>Occupation</Label><Input value={form.occupation || ""} onChange={e => setForm({ ...form, occupation: e.target.value })} /></div>
               <div><Label>Organization</Label><Input value={form.organization || ""} onChange={e => setForm({ ...form, organization: e.target.value })} /></div>
               <div><Label>City</Label><Input value={form.city || ""} onChange={e => setForm({ ...form, city: e.target.value })} /></div>
@@ -124,6 +126,8 @@ export default function MemberProfile() {
               <ProfileField icon={Hash} label="Member ID" value={data.member_id} />
               <ProfileField icon={Star} label="Membership Type" value={data.membership_type} />
               <ProfileField icon={Calendar} label="Join Date" value={data.join_date} />
+              <ProfileField icon={User} label="Position" value={data.position} />
+              <ProfileField icon={GitBranch} label="Branch / Chapter" value={data.branch} />
               <ProfileField icon={Briefcase} label="Occupation" value={data.occupation} />
               <ProfileField icon={Building} label="Organization" value={data.organization} />
               <ProfileField icon={MapPin} label="City" value={data.city} />
