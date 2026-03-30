@@ -14,6 +14,7 @@ export default function EventList() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
 
   useEffect(() => {
     base44.entities.Event.list('-date', 50).then(setEvents).catch(() => []).finally(() => setLoading(false));
@@ -22,7 +23,8 @@ export default function EventList() {
   const filtered = events.filter(e => {
     const matchSearch = e.title?.toLowerCase().includes(search.toLowerCase());
     const matchType = typeFilter === "all" || e.type === typeFilter;
-    return matchSearch && matchType;
+    const matchStatus = statusFilter === "all" || e.status === statusFilter;
+    return matchSearch && matchType && matchStatus;
   });
 
   if (loading) {
@@ -39,7 +41,7 @@ export default function EventList() {
           <Input placeholder="Search events..." className="pl-9" value={search} onChange={(e) => setSearch(e.target.value)} />
         </div>
         <Select value={typeFilter} onValueChange={setTypeFilter}>
-          <SelectTrigger className="w-full sm:w-44">
+          <SelectTrigger className="w-full sm:w-40">
             <SelectValue placeholder="All types" />
           </SelectTrigger>
           <SelectContent>
@@ -50,6 +52,18 @@ export default function EventList() {
             <SelectItem value="meeting">Meeting</SelectItem>
             <SelectItem value="social">Social</SelectItem>
             <SelectItem value="training">Training</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="w-full sm:w-40">
+            <SelectValue placeholder="All statuses" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Statuses</SelectItem>
+            <SelectItem value="upcoming">Upcoming</SelectItem>
+            <SelectItem value="ongoing">Ongoing</SelectItem>
+            <SelectItem value="completed">Completed</SelectItem>
+            <SelectItem value="cancelled">Cancelled</SelectItem>
           </SelectContent>
         </Select>
       </div>

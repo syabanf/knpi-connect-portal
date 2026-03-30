@@ -1,0 +1,45 @@
+{
+  "name": "Message",
+  "type": "object",
+  "properties": {
+    "sender_email": {
+      "type": "string",
+      "title": "Sender Email"
+    },
+    "sender_name": {
+      "type": "string",
+      "title": "Sender Name"
+    },
+    "recipient_email": {
+      "type": "string",
+      "title": "Recipient Email"
+    },
+    "recipient_name": {
+      "type": "string",
+      "title": "Recipient Name"
+    },
+    "subject": {
+      "type": "string",
+      "title": "Subject"
+    },
+    "body": {
+      "type": "string",
+      "title": "Body"
+    },
+    "is_read": {
+      "type": "boolean",
+      "title": "Is Read",
+      "default": false
+    },
+    "thread_id": {
+      "type": "string",
+      "title": "Thread ID"
+    }
+  },
+  "required": [
+    "sender_email",
+    "recipient_email",
+    "subject",
+    "body"
+  ]
+}

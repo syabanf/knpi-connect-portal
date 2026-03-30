@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
-import { ClipboardList, Plus, Send, Eye, X as XIcon, LayoutGrid, List } from "lucide-react";
+import { ClipboardList, Plus, Send, Eye, X as XIcon, LayoutGrid, List, Search } from "lucide-react";
 import RequestsKanban from "@/components/requests/RequestsKanban";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,6 +22,9 @@ export default function Requests() {
   const [detailRequest, setDetailRequest] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [viewMode, setViewMode] = useState("kanban");
+  const [search, setSearch] = useState("");
+  const [typeFilter, setTypeFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [form, setForm] = useState({ title: "", description: "", type: "certificate", priority: "medium" });
 
   useEffect(() => {
@@ -48,6 +51,13 @@ export default function Requests() {
     }
     setSubmitting(false);
   };
+
+  const filteredRequests = requests.filter(r => {
+    const matchSearch = r.title?.toLowerCase().includes(search.toLowerCase()) || r.requester_name?.toLowerCase().includes(search.toLowerCase());
+    const matchType = typeFilter === "all" || r.type === typeFilter;
+    const matchStatus = statusFilter === "all" || r.status === statusFilter;
+    return matchSearch && matchType && matchStatus;
+  });
 
   if (loading) return <div className="flex items-center justify-center h-64"><div className="w-8 h-8 border-4 border-primary/20 border-t-primary rounded-full animate-spin" /></div>;
 
@@ -110,6 +120,36 @@ export default function Requests() {
         </Dialog>
       </PageHeader>
 
+      <div className="flex flex-col sm:flex-row gap-3 mb-6">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input placeholder="Search requests..." className="pl-9" value={search} onChange={e => setSearch(e.target.value)} />
+        </div>
+        <Select value={typeFilter} onValueChange={setTypeFilter}>
+          <SelectTrigger className="w-full sm:w-40"><SelectValue placeholder="All types" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Types</SelectItem>
+            <SelectItem value="certificate">Certificate</SelectItem>
+            <SelectItem value="letter">Letter</SelectItem>
+            <SelectItem value="membership_change">Membership Change</SelectItem>
+            <SelectItem value="complaint">Complaint</SelectItem>
+            <SelectItem value="suggestion">Suggestion</SelectItem>
+            <SelectItem value="other">Other</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="w-full sm:w-40"><SelectValue placeholder="All statuses" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Statuses</SelectItem>
+            <SelectItem value="submitted">Submitted</SelectItem>
+            <SelectItem value="in_review">In Review</SelectItem>
+            <SelectItem value="approved">Approved</SelectItem>
+            <SelectItem value="rejected">Rejected</SelectItem>
+            <SelectItem value="completed">Completed</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
       {detailRequest && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setDetailRequest(null)}>
           <div className="bg-card rounded-2xl border border-border p-6 max-w-lg w-full shadow-xl" onClick={e => e.stopPropagation()}>
@@ -144,10 +184,10 @@ export default function Requests() {
       )}
 
       {viewMode === 'kanban' ? (
-        <RequestsKanban requests={requests} onUpdate={() => base44.entities.ServiceRequest.list('-created_date', 50).then(setRequests)} />
-      ) : requests.length > 0 ? (
+        <RequestsKanban requests={filteredRequests} onUpdate={() => base44.entities.ServiceRequest.list('-created_date', 50).then(setRequests)} />
+      ) : filteredRequests.length > 0 ? (
         <div className="space-y-3">
-          {requests.map(r => (
+          {filteredRequests.map(r => (
             <div key={r.id} className="bg-card rounded-xl border border-border p-5 hover:shadow-sm transition-all cursor-pointer" onClick={() => setDetailRequest(r)}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="min-w-0">

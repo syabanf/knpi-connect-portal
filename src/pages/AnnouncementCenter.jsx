@@ -12,6 +12,7 @@ export default function AnnouncementCenter() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [catFilter, setCatFilter] = useState("all");
+  const [priorityFilter, setPriorityFilter] = useState("all");
 
   useEffect(() => {
     base44.entities.Announcement.filter({ published: true }, '-created_date', 100)
@@ -21,7 +22,8 @@ export default function AnnouncementCenter() {
   const filtered = announcements.filter(a => {
     const matchSearch = a.title?.toLowerCase().includes(search.toLowerCase()) || a.content?.toLowerCase().includes(search.toLowerCase());
     const matchCat = catFilter === "all" || a.category === catFilter;
-    return matchSearch && matchCat;
+    const matchPriority = priorityFilter === "all" || a.priority === priorityFilter;
+    return matchSearch && matchCat && matchPriority;
   });
 
   const pinned = filtered.filter(a => a.is_pinned);
@@ -39,7 +41,7 @@ export default function AnnouncementCenter() {
           <Input placeholder="Search announcements..." className="pl-9" value={search} onChange={e => setSearch(e.target.value)} />
         </div>
         <Select value={catFilter} onValueChange={setCatFilter}>
-          <SelectTrigger className="w-full sm:w-44">
+          <SelectTrigger className="w-full sm:w-40">
             <SelectValue placeholder="All categories" />
           </SelectTrigger>
           <SelectContent>
@@ -49,6 +51,17 @@ export default function AnnouncementCenter() {
             <SelectItem value="event">Event</SelectItem>
             <SelectItem value="policy">Policy</SelectItem>
             <SelectItem value="internal">Internal</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select value={priorityFilter} onValueChange={setPriorityFilter}>
+          <SelectTrigger className="w-full sm:w-36">
+            <SelectValue placeholder="All priorities" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Priorities</SelectItem>
+            <SelectItem value="low">Low</SelectItem>
+            <SelectItem value="medium">Medium</SelectItem>
+            <SelectItem value="high">High</SelectItem>
           </SelectContent>
         </Select>
       </div>

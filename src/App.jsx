@@ -22,6 +22,7 @@ import DocumentCenter from './pages/DocumentCenter';
 import AnnouncementCenter from './pages/AnnouncementCenter';
 import Requests from './pages/Requests';
 import MemberProfile from './pages/MemberProfile';
+import Messages from './pages/Messages';
 import Analytics from './pages/Analytics';
 
 // Admin Pages
@@ -69,6 +70,7 @@ const AuthenticatedApp = () => {
         <Route path="/announcements" element={<AnnouncementCenter />} />
         <Route path="/requests" element={<Requests />} />
         <Route path="/profile" element={<MemberProfile />} />
+        <Route path="/messages" element={<Messages />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/members" element={<AdminMembers />} />
