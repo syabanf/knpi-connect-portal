@@ -1,0 +1,93 @@
+{
+  "name": "Community",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Community Name"
+    },
+    "description": {
+      "type": "string",
+      "title": "Description"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "professional",
+        "hobby",
+        "learning",
+        "social",
+        "support",
+        "other"
+      ],
+      "title": "Category",
+      "default": "other"
+    },
+    "image_url": {
+      "type": "string",
+      "title": "Image URL"
+    },
+    "members": {
+      "type": "array",
+      "title": "Members",
+      "items": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "admin",
+              "member"
+            ]
+          },
+          "joined_date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "events": {
+      "type": "array",
+      "title": "Community Events",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive"
+      ],
+      "title": "Status",
+      "default": "active"
+    },
+    "is_public": {
+      "type": "boolean",
+      "title": "Public",
+      "default": true
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

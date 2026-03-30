@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import {
   Home, Users, Calendar, FileText, Megaphone, ClipboardList,
-  BarChart3, Settings, ChevronLeft, ChevronRight, Shield, X
+  BarChart3, Settings, ChevronLeft, ChevronRight, Shield, X, Users2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -11,6 +11,7 @@ const memberLinks = [
   { to: "/documents", icon: FileText, label: "Documents" },
   { to: "/announcements", icon: Megaphone, label: "Announcements" },
   { to: "/requests", icon: ClipboardList, label: "Requests" },
+  { to: "/communities", icon: Users2, label: "Communities" },
   { to: "/profile", icon: Users, label: "My Profile" },
 ];
 

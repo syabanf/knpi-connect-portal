@@ -1,0 +1,61 @@
+{
+  "name": "CommunityEvent",
+  "type": "object",
+  "properties": {
+    "community_id": {
+      "type": "string",
+      "title": "Community ID"
+    },
+    "title": {
+      "type": "string",
+      "title": "Title"
+    },
+    "description": {
+      "type": "string",
+      "title": "Description"
+    },
+    "date": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date-time",
+      "title": "End Date"
+    },
+    "location": {
+      "type": "string",
+      "title": "Location"
+    },
+    "image_url": {
+      "type": "string",
+      "title": "Image URL"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "upcoming",
+        "ongoing",
+        "completed",
+        "cancelled"
+      ],
+      "title": "Status",
+      "default": "upcoming"
+    },
+    "capacity": {
+      "type": "number",
+      "title": "Capacity"
+    },
+    "registered_count": {
+      "type": "number",
+      "title": "Registered Count",
+      "default": 0
+    }
+  },
+  "required": [
+    "community_id",
+    "title",
+    "date"
+  ]
+}

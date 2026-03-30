@@ -32,6 +32,7 @@ import AdminDocuments from './pages/admin/AdminDocuments';
 import AdminAnnouncements from './pages/admin/AdminAnnouncements';
 import AdminRequests from './pages/admin/AdminRequests';
 import AdminSettings from './pages/admin/AdminSettings';
+import Communities from './pages/Communities';
 import AdminCMS from './pages/admin/AdminCMS';
 
 const PUBLIC_PATHS = ['/', '/event/', '/news/'];
@@ -69,6 +70,7 @@ const AuthenticatedApp = () => {
         <Route path="/announcements" element={<AnnouncementCenter />} />
         <Route path="/requests" element={<Requests />} />
         <Route path="/profile" element={<MemberProfile />} />
+        <Route path="/communities" element={<Communities />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/members" element={<AdminMembers />} />

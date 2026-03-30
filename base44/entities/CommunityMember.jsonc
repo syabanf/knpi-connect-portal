@@ -1,0 +1,48 @@
+{
+  "name": "CommunityMember",
+  "type": "object",
+  "properties": {
+    "community_id": {
+      "type": "string",
+      "title": "Community ID"
+    },
+    "member_email": {
+      "type": "string",
+      "title": "Member Email"
+    },
+    "member_name": {
+      "type": "string",
+      "title": "Member Name"
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "admin",
+        "moderator",
+        "member"
+      ],
+      "title": "Role",
+      "default": "member"
+    },
+    "joined_date": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Joined Date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive",
+        "banned"
+      ],
+      "title": "Status",
+      "default": "active"
+    }
+  },
+  "required": [
+    "community_id",
+    "member_email",
+    "member_name"
+  ]
+}
