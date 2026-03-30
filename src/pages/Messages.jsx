@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
-import { MessageSquare, Send, Search, Plus, ArrowLeft, User, X } from "lucide-react";
+import { MessageSquare, Send, Search, Plus, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,11 +13,10 @@ import { toast } from "sonner";
 
 export default function Messages() {
   const { user } = useOutletContext();
+  const navigate = useNavigate();
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [activeThread, setActiveThread] = useState(null);
-  const [replyBody, setReplyBody] = useState("");
   const [composeOpen, setComposeOpen] = useState(false);
   const [members, setMembers] = useState([]);
   const [form, setForm] = useState({ recipient_email: "", recipient_name: "", subject: "", body: "" });
@@ -66,41 +65,6 @@ export default function Messages() {
     t.messages.some(m => m.sender_name?.toLowerCase().includes(search.toLowerCase()) || m.body?.toLowerCase().includes(search.toLowerCase()))
   );
 
-  const openThread = async (thread) => {
-    setActiveThread(thread);
-    // Mark unread as read
-    const unread = thread.messages.filter(m => !m.is_read && m.recipient_email === user?.email);
-    await Promise.all(unread.map(m => base44.entities.Message.update(m.id, { is_read: true })));
-    if (unread.length) loadMessages();
-  };
-
-  const handleReply = async () => {
-    if (!replyBody.trim()) return;
-    const lastMsg = activeThread.messages[activeThread.messages.length - 1];
-    const isSender = lastMsg.sender_email === user?.email;
-    const recipientEmail = isSender ? lastMsg.recipient_email : lastMsg.sender_email;
-    const recipientName = isSender ? lastMsg.recipient_name : lastMsg.sender_name;
-    setSending(true);
-    try {
-      await base44.entities.Message.create({
-        sender_email: user.email,
-        sender_name: user.full_name,
-        recipient_email: recipientEmail,
-        recipient_name: recipientName,
-        subject: `Re: ${activeThread.subject.replace(/^Re: /, "")}`,
-        body: replyBody,
-        thread_id: activeThread.id,
-        is_read: false,
-      });
-      setReplyBody("");
-      toast.success("Reply sent!");
-      await loadMessages();
-      // Refresh active thread
-      const updated = messages.find(m => (m.thread_id || m.id) === activeThread.id);
-    } catch { toast.error("Failed to send reply."); }
-    setSending(false);
-  };
-
   const handleCompose = async () => {
     if (!form.recipient_email || !form.subject || !form.body) { toast.error("All fields required"); return; }
     setSending(true);
@@ -128,59 +92,6 @@ export default function Messages() {
     (m.full_name?.toLowerCase().includes(memberSearch.toLowerCase()) || m.email?.toLowerCase().includes(memberSearch.toLowerCase()))
   );
 
-  // Thread view
-  if (activeThread) {
-    const msgs = [...activeThread.messages].sort((a, b) => new Date(a.created_date) - new Date(b.created_date));
-    return (
-      <div>
-        <div className="flex items-center gap-3 mb-6">
-          <Button variant="outline" size="sm" onClick={() => setActiveThread(null)}>
-            <ArrowLeft className="w-4 h-4 mr-2" /> Back
-          </Button>
-          <div>
-            <h1 className="font-heading font-bold text-lg">{activeThread.subject}</h1>
-            <p className="text-sm text-muted-foreground">{msgs.length} message{msgs.length !== 1 ? "s" : ""}</p>
-          </div>
-        </div>
-
-        <div className="space-y-4 mb-6">
-          {msgs.map(m => {
-            const isMe = m.sender_email === user?.email;
-            return (
-              <div key={m.id} className={`flex gap-3 ${isMe ? "flex-row-reverse" : ""}`}>
-                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-1">
-                  <User className="w-4 h-4 text-primary" />
-                </div>
-                <div className={`max-w-[75%] ${isMe ? "items-end" : "items-start"} flex flex-col gap-1`}>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-semibold">{isMe ? "You" : m.sender_name || m.sender_email}</span>
-                    <span className="text-[11px] text-muted-foreground">{new Date(m.created_date).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
-                  </div>
-                  <div className={`rounded-2xl px-4 py-3 text-sm leading-relaxed ${isMe ? "bg-primary text-white rounded-tr-sm" : "bg-card border border-border rounded-tl-sm"}`}>
-                    {m.body}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="bg-card border border-border rounded-xl p-4">
-          <Textarea
-            placeholder="Write a reply..."
-            value={replyBody}
-            onChange={e => setReplyBody(e.target.value)}
-            rows={3}
-            className="mb-3 resize-none"
-          />
-          <Button onClick={handleReply} disabled={sending || !replyBody.trim()} className="font-semibold">
-            <Send className="w-4 h-4 mr-2" /> {sending ? "Sending..." : "Send Reply"}
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div>
       <PageHeader title="Messages" description={totalUnread > 0 ? `${totalUnread} unread message${totalUnread > 1 ? "s" : ""}` : "Your inbox"}>
@@ -207,7 +118,7 @@ export default function Messages() {
             return (
               <div
                 key={thread.id}
-                onClick={() => openThread(thread)}
+                onClick={() => navigate(`/messages/${thread.id}`)}
                 className={`bg-card border rounded-xl p-4 cursor-pointer hover:shadow-sm transition-all flex gap-3 ${thread.unread > 0 ? "border-primary/30 bg-primary/5" : "border-border"}`}
               >
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${thread.unread > 0 ? "bg-primary text-white" : "bg-muted text-muted-foreground"}`}>
