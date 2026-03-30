@@ -78,9 +78,7 @@ export default function Landing() {
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between py-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-sm">
-              <span className="text-white font-heading font-extrabold text-lg">K</span>
-            </div>
+            <img src="https://media.base44.com/images/public/69ca1dd832db930f6890ae13/4faf2f698_image.png" alt="KNPI" className="w-10 h-10 object-contain" />
             <div>
               <span className="font-heading font-bold text-xl text-gray-900">KNPI</span>
               <span className="font-heading text-sm text-primary ml-1 hidden sm:inline">Connect Portal</span>
@@ -392,9 +390,7 @@ export default function Landing() {
           <div className="grid md:grid-cols-3 gap-8">
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-                  <span className="text-white font-heading font-extrabold">K</span>
-                </div>
+                <img src="https://media.base44.com/images/public/69ca1dd832db930f6890ae13/4faf2f698_image.png" alt="KNPI" className="w-10 h-10 object-contain" />
                 <span className="font-heading font-bold text-xl text-gray-900">KNPI</span>
               </div>
               <p className="text-gray-500 text-sm leading-relaxed">

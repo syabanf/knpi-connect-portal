@@ -40,9 +40,7 @@ export default function Sidebar({ collapsed, setCollapsed, userRole, mobileOpen,
       <div className="flex items-center justify-between p-4 border-b border-sidebar-border">
         {!collapsed && (
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-heading font-bold text-sm">K</span>
-            </div>
+            <img src="https://media.base44.com/images/public/69ca1dd832db930f6890ae13/4faf2f698_image.png" alt="KNPI" className="w-8 h-8 object-contain" />
             <span className="font-heading font-bold text-sm text-sidebar-foreground">KNPI Connect</span>
           </div>
         )}
