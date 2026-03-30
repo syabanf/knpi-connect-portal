@@ -19,7 +19,7 @@ export default function AdminMembers() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingMember, setEditingMember] = useState(null);
-  const [form, setForm] = useState({ full_name: "", email: "", phone: "", status: "pending", membership_type: "regular" });
+  const [form, setForm] = useState({ full_name: "", email: "", phone: "", position: "", branch: "", status: "pending", membership_type: "regular" });
 
   useEffect(() => {
     loadMembers();
@@ -41,7 +41,7 @@ export default function AdminMembers() {
       }
       setDialogOpen(false);
       setEditingMember(null);
-      setForm({ full_name: "", email: "", phone: "", status: "pending", membership_type: "regular" });
+      setForm({ full_name: "", email: "", phone: "", position: "", branch: "", status: "pending", membership_type: "regular" });
       loadMembers();
     } catch { toast.error("Failed to save member."); }
   };
@@ -84,6 +84,10 @@ export default function AdminMembers() {
               <div><Label>Full Name *</Label><Input value={form.full_name || ""} onChange={e => setForm({ ...form, full_name: e.target.value })} /></div>
               <div><Label>Email *</Label><Input value={form.email || ""} onChange={e => setForm({ ...form, email: e.target.value })} type="email" /></div>
               <div><Label>Phone</Label><Input value={form.phone || ""} onChange={e => setForm({ ...form, phone: e.target.value })} /></div>
+              <div className="grid grid-cols-2 gap-3">
+                <div><Label>Jabatan / Position</Label><Input value={form.position || ""} onChange={e => setForm({ ...form, position: e.target.value })} placeholder="e.g. Ketua, Sekretaris" /></div>
+                <div><Label>Cabang / Branch</Label><Input value={form.branch || ""} onChange={e => setForm({ ...form, branch: e.target.value })} placeholder="e.g. DKI Jakarta" /></div>
+              </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <Label>Status</Label>
@@ -138,19 +142,26 @@ export default function AdminMembers() {
             <TableHeader>
               <TableRow>
                 <TableHead>Name</TableHead>
-                <TableHead className="hidden sm:table-cell">Email</TableHead>
+                <TableHead className="hidden md:table-cell">Jabatan</TableHead>
+                <TableHead className="hidden lg:table-cell">Cabang</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Type</TableHead>
+                <TableHead className="hidden sm:table-cell">Type</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filtered.map(m => (
                 <TableRow key={m.id}>
-                  <TableCell className="font-medium">{m.full_name}</TableCell>
-                  <TableCell className="hidden sm:table-cell text-muted-foreground">{m.email}</TableCell>
+                  <TableCell>
+                    <div>
+                      <p className="font-medium">{m.full_name}</p>
+                      <p className="text-xs text-muted-foreground hidden sm:block">{m.email}</p>
+                    </div>
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell text-sm">{m.position || <span className="text-muted-foreground">—</span>}</TableCell>
+                  <TableCell className="hidden lg:table-cell text-sm">{m.branch || <span className="text-muted-foreground">—</span>}</TableCell>
                   <TableCell><StatusBadge status={m.status} /></TableCell>
-                  <TableCell><StatusBadge status={m.membership_type} /></TableCell>
+                  <TableCell className="hidden sm:table-cell"><StatusBadge status={m.membership_type} /></TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">
                       <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEdit(m)}><Edit className="w-3.5 h-3.5" /></Button>
