@@ -52,7 +52,7 @@ export default function Topbar({ user, onMenuClick }) {
               My Profile
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => base44.auth.logout('/')} className="text-destructive">
+            <DropdownMenuItem onClick={() => { localStorage.removeItem('dummyRole'); window.location.href = '/'; }} className="text-destructive">
               <LogOut className="w-4 h-4 mr-2" />
               Sign Out
             </DropdownMenuItem>

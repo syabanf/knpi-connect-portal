@@ -1,17 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
-import { base44 } from "@/api/base44Client";
 
 export default function DashboardLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
-  }, []);
+  const role = localStorage.getItem('dummyRole') || 'user';
+  const user = { full_name: role === 'admin' ? 'Admin User' : 'Member User', role };
 
   return (
     <div className="flex min-h-screen bg-background">

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Calendar, FileText, Users, Megaphone, ArrowRight, ChevronRight, Star, MapPin, Globe, Award, TrendingUp, Shield, Phone, Mail, Menu, X } from "lucide-react";
 import { base44 } from "@/api/base44Client";
@@ -66,8 +66,9 @@ export default function Landing() {
       .then(setEvents).catch(() => {});
   }, []);
 
-  const handleLogin = () => {
-    base44.auth.redirectToLogin('/dashboard');
+  const handleEnter = (role) => {
+    localStorage.setItem('dummyRole', role);
+    navigate(role === 'admin' ? '/admin' : '/dashboard');
   };
 
   return (
@@ -92,11 +93,11 @@ export default function Landing() {
             <a href="#contact" className="hover:text-primary transition-colors">Contact</a>
           </nav>
           <div className="hidden md:flex items-center gap-3">
-            <Button variant="outline" onClick={handleLogin} className="font-semibold border-primary text-primary hover:bg-primary hover:text-white">
-              Login
+            <Button variant="outline" onClick={() => handleEnter('user')} className="font-semibold border-primary text-primary hover:bg-primary hover:text-white">
+              Member Portal
             </Button>
-            <Button onClick={handleLogin} className="font-semibold">
-              Member Portal <ArrowRight className="w-4 h-4" />
+            <Button onClick={() => handleEnter('admin')} className="font-semibold">
+              Admin Portal <ArrowRight className="w-4 h-4" />
             </Button>
           </div>
           <button className="md:hidden p-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
@@ -109,7 +110,10 @@ export default function Landing() {
             <a href="#programs" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sm font-medium text-gray-600">Programs</a>
             <a href="#events" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sm font-medium text-gray-600">Events</a>
             <a href="#news" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sm font-medium text-gray-600">News</a>
-            <Button onClick={handleLogin} className="w-full font-semibold mt-2">Login / Member Portal</Button>
+            <div className="flex flex-col gap-2 mt-2">
+              <Button onClick={() => handleEnter('user')} className="w-full font-semibold">Member Portal</Button>
+              <Button onClick={() => handleEnter('admin')} variant="outline" className="w-full font-semibold">Admin Portal</Button>
+            </div>
           </div>
         )}
       </header>
@@ -137,7 +141,7 @@ export default function Landing() {
               The National Youth Committee of Indonesia — uniting young leaders to build a stronger, more prosperous nation together.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
-              <Button size="lg" onClick={handleLogin} className="font-bold px-10 py-6 text-base bg-primary hover:bg-primary/90 shadow-xl shadow-primary/30">
+              <Button size="lg" onClick={() => handleEnter('user')} className="font-bold px-10 py-6 text-base bg-primary hover:bg-primary/90 shadow-xl shadow-primary/30">
                 Access Member Portal <ArrowRight className="w-5 h-5" />
               </Button>
               <a href="#about">
@@ -370,11 +374,11 @@ export default function Landing() {
               Become part of Indonesia's largest youth network. Access exclusive resources, events, and opportunities through the KNPI Member Portal.
             </p>
             <div className="mt-10 flex flex-wrap justify-center gap-4">
-              <Button size="lg" onClick={handleLogin} className="font-bold px-10 py-6 text-base bg-yellow-400 text-gray-900 hover:bg-yellow-300 shadow-xl">
-                Join Now <ArrowRight className="w-5 h-5" />
+              <Button size="lg" onClick={() => handleEnter('user')} className="font-bold px-10 py-6 text-base bg-yellow-400 text-gray-900 hover:bg-yellow-300 shadow-xl">
+                Member Portal <ArrowRight className="w-5 h-5" />
               </Button>
-              <Button size="lg" variant="outline" onClick={handleLogin} className="font-semibold px-8 py-6 text-base text-white border-white/40 hover:bg-white/10 hover:text-white">
-                Member Login
+              <Button size="lg" variant="outline" onClick={() => handleEnter('admin')} className="font-semibold px-8 py-6 text-base text-white border-white/40 hover:bg-white/10 hover:text-white">
+                Admin Portal
               </Button>
             </div>
           </motion.div>
@@ -419,7 +423,7 @@ export default function Landing() {
               <h4 className="font-heading font-bold text-gray-900 mb-4">Quick Links</h4>
               <div className="space-y-2">
                 {["About KNPI", "Our Programs", "Events", "News", "Member Portal"].map(link => (
-                  <button key={link} onClick={handleLogin} className="block text-sm text-gray-500 hover:text-primary transition-colors">
+                  <button key={link} onClick={() => handleEnter('user')} className="block text-sm text-gray-500 hover:text-primary transition-colors">
                     {link}
                   </button>
                 ))}
