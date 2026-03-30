@@ -22,8 +22,6 @@ import DocumentCenter from './pages/DocumentCenter';
 import AnnouncementCenter from './pages/AnnouncementCenter';
 import Requests from './pages/Requests';
 import MemberProfile from './pages/MemberProfile';
-import Messages from './pages/Messages';
-import MessageRoom from './pages/MessageRoom';
 import Analytics from './pages/Analytics';
 
 // Admin Pages
@@ -71,8 +69,6 @@ const AuthenticatedApp = () => {
         <Route path="/announcements" element={<AnnouncementCenter />} />
         <Route path="/requests" element={<Requests />} />
         <Route path="/profile" element={<MemberProfile />} />
-        <Route path="/messages" element={<Messages />} />
-        <Route path="/messages/:threadId" element={<MessageRoom />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/members" element={<AdminMembers />} />
@@ -81,7 +77,6 @@ const AuthenticatedApp = () => {
         <Route path="/admin/announcements" element={<AdminAnnouncements />} />
         <Route path="/admin/requests" element={<AdminRequests />} />
         <Route path="/admin/settings" element={<AdminSettings />} />
-        <Route path="/admin/cms" element={<AdminCMS />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
