@@ -33,8 +33,12 @@ import AdminAnnouncements from './pages/admin/AdminAnnouncements';
 import AdminRequests from './pages/admin/AdminRequests';
 import AdminSettings from './pages/admin/AdminSettings';
 
+const PUBLIC_PATHS = ['/', '/event/', '/news/'];
+
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
+  const currentPath = window.location.pathname;
+  const isPublicPath = PUBLIC_PATHS.some(p => currentPath === p || currentPath.startsWith(p));
 
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
@@ -48,8 +52,10 @@ const AuthenticatedApp = () => {
     if (authError.type === 'user_not_registered') {
       return <UserNotRegisteredError />;
     } else if (authError.type === 'auth_required') {
-      navigateToLogin();
-      return null;
+      if (!isPublicPath) {
+        navigateToLogin();
+        return null;
+      }
     }
   }
 
