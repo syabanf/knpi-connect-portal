@@ -44,6 +44,30 @@
       "title": "Access Level",
       "default": "members"
     },
+    "audience": {
+      "type": "string",
+      "enum": [
+        "all",
+        "branch",
+        "position"
+      ],
+      "title": "Audience",
+      "default": "all"
+    },
+    "audience_branches": {
+      "type": "array",
+      "title": "Target Branches",
+      "items": {
+        "type": "string"
+      }
+    },
+    "audience_positions": {
+      "type": "array",
+      "title": "Target Positions",
+      "items": {
+        "type": "string"
+      }
+    },
     "download_count": {
       "type": "number",
       "title": "Download Count",

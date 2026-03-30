@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { FileText, Plus, Edit, Trash2, Search, Upload } from "lucide-react";
+import AudiencePicker from "@/components/shared/AudiencePicker";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,7 +22,7 @@ export default function AdminDocuments() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingDoc, setEditingDoc] = useState(null);
   const [uploading, setUploading] = useState(false);
-  const [form, setForm] = useState({ title: "", description: "", category: "general", file_url: "", access_level: "members", is_pinned: false });
+  const [form, setForm] = useState({ title: "", description: "", category: "general", file_url: "", access_level: "members", audience: "all", audience_branches: [], audience_positions: [], is_pinned: false });
 
   useEffect(() => { loadDocs(); }, []);
 
@@ -74,7 +75,7 @@ export default function AdminDocuments() {
   const resetDialog = () => {
     setDialogOpen(false);
     setEditingDoc(null);
-    setForm({ title: "", description: "", category: "general", file_url: "", access_level: "members", is_pinned: false });
+    setForm({ title: "", description: "", category: "general", file_url: "", access_level: "members", audience: "all", audience_branches: [], audience_positions: [], is_pinned: false });
   };
 
   const openEdit = (doc) => {
@@ -138,6 +139,18 @@ export default function AdminDocuments() {
                   </Select>
                 </div>
               </div>
+              <div>
+                <Label>Audience Targeting</Label>
+                <AudiencePicker
+                  mode="event"
+                  audience={form.audience}
+                  audienceBranches={form.audience_branches || []}
+                  audiencePositions={form.audience_positions || []}
+                  onAudienceChange={v => setForm({ ...form, audience: v, audience_branches: [], audience_positions: [] })}
+                  onBranchesChange={v => setForm({ ...form, audience_branches: v })}
+                  onPositionsChange={v => setForm({ ...form, audience_positions: v })}
+                />
+              </div>
               <div className="flex items-center gap-3">
                 <Switch checked={form.is_pinned} onCheckedChange={v => setForm({ ...form, is_pinned: v })} />
                 <Label>Pin this document</Label>
@@ -175,7 +188,12 @@ export default function AdminDocuments() {
                     </div>
                   </TableCell>
                   <TableCell className="hidden sm:table-cell"><StatusBadge status={d.category} /></TableCell>
-                  <TableCell className="hidden md:table-cell capitalize text-sm">{d.access_level}</TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    <div className="text-sm capitalize">{d.access_level}</div>
+                    {d.audience && d.audience !== 'all' && (
+                      <div className="text-xs text-muted-foreground">{d.audience}: {(d.audience_branches || d.audience_positions || []).join(', ') || '—'}</div>
+                    )}
+                  </TableCell>
                   <TableCell className="hidden md:table-cell text-sm text-muted-foreground">{d.download_count || 0}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">

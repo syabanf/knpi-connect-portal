@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useOutletContext } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { FileText, Download, Search, Pin, FolderOpen, Eye, X as XIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -9,16 +10,38 @@ import StatusBadge from "@/components/shared/StatusBadge";
 import EmptyState from "@/components/shared/EmptyState";
 
 export default function DocumentCenter() {
+  const { user } = useOutletContext() || {};
   const [documents, setDocuments] = useState([]);
+  const [member, setMember] = useState(null);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [catFilter, setCatFilter] = useState("all");
 
   useEffect(() => {
-    base44.entities.Document.list('-created_date', 100).then(setDocuments).catch(() => []).finally(() => setLoading(false));
-  }, []);
+    base44.entities.Document.list('-created_date', 200).then(setDocuments).catch(() => []).finally(() => setLoading(false));
+    if (user?.email) {
+      base44.entities.Member.filter({ email: user.email }, '-created_date', 1)
+        .then(r => setMember(r[0] || null)).catch(() => null);
+    }
+  }, [user]);
+
+  const isAdmin = user?.role === 'admin' || user?.role === 'super_admin';
 
   const filtered = documents.filter(d => {
+    // RBAC: access level check
+    if (d.access_level === 'admin' && !isAdmin) return false;
+    if (d.access_level === 'members' && !user) return false;
+
+    // Audience targeting
+    if (d.audience === 'branch') {
+      const branches = d.audience_branches || [];
+      if (branches.length > 0 && !isAdmin && !branches.includes(member?.branch)) return false;
+    }
+    if (d.audience === 'position') {
+      const positions = d.audience_positions || [];
+      if (positions.length > 0 && !isAdmin && !positions.includes(member?.position)) return false;
+    }
+
     const matchSearch = d.title?.toLowerCase().includes(search.toLowerCase());
     const matchCat = catFilter === "all" || d.category === catFilter;
     return matchSearch && matchCat;
