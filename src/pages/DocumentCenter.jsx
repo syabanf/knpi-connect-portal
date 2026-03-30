@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { FileText, Download, Search, Pin, FolderOpen } from "lucide-react";
+import { FileText, Download, Search, Pin, FolderOpen, Eye, X as XIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -77,6 +77,8 @@ export default function DocumentCenter() {
 }
 
 function DocumentCard({ doc }) {
+  const [preview, setPreview] = useState(false);
+
   const handleDownload = async () => {
     if (doc.file_url) {
       window.open(doc.file_url, '_blank');
@@ -87,26 +89,49 @@ function DocumentCard({ doc }) {
   };
 
   return (
-    <div className="bg-card rounded-xl border border-border p-5 hover:shadow-md transition-all group">
-      <div className="flex items-start gap-3">
-        <div className="p-2.5 rounded-lg bg-secondary shrink-0">
-          <FileText className="w-5 h-5 text-primary" />
-        </div>
-        <div className="min-w-0 flex-1">
-          <h3 className="font-heading font-semibold text-sm line-clamp-2">{doc.title}</h3>
-          <div className="flex items-center gap-2 mt-1">
-            {doc.category && <StatusBadge status={doc.category} />}
-            {doc.file_type && <span className="text-[10px] uppercase text-muted-foreground font-medium">{doc.file_type}</span>}
+    <>
+      {preview && (
+        <div className="fixed inset-0 z-50 flex flex-col bg-black/80" onClick={() => setPreview(false)}>
+          <div className="flex items-center justify-between px-4 py-3 bg-card border-b" onClick={e => e.stopPropagation()}>
+            <h3 className="font-heading font-semibold truncate">{doc.title}</h3>
+            <div className="flex gap-2">
+              <Button size="sm" variant="outline" onClick={handleDownload}><Download className="w-4 h-4 mr-1" /> Download</Button>
+              <button onClick={() => setPreview(false)} className="p-1.5 hover:bg-muted rounded-lg"><XIcon className="w-4 h-4" /></button>
+            </div>
           </div>
-          {doc.description && <p className="text-xs text-muted-foreground mt-2 line-clamp-2">{doc.description}</p>}
-          <div className="flex items-center justify-between mt-3">
-            <span className="text-[10px] text-muted-foreground">{doc.download_count || 0} downloads</span>
-            <Button variant="ghost" size="sm" className="text-primary h-7 text-xs" onClick={handleDownload}>
-              <Download className="w-3.5 h-3.5 mr-1" /> Download
-            </Button>
+          <div className="flex-1 overflow-hidden" onClick={e => e.stopPropagation()}>
+            <iframe src={doc.file_url} className="w-full h-full" title={doc.title} />
+          </div>
+        </div>
+      )}
+      <div className="bg-card rounded-xl border border-border p-5 hover:shadow-md transition-all group">
+        <div className="flex items-start gap-3">
+          <div className="p-2.5 rounded-lg bg-secondary shrink-0">
+            <FileText className="w-5 h-5 text-primary" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <h3 className="font-heading font-semibold text-sm line-clamp-2">{doc.title}</h3>
+            <div className="flex items-center gap-2 mt-1">
+              {doc.category && <StatusBadge status={doc.category} />}
+              {doc.file_type && <span className="text-[10px] uppercase text-muted-foreground font-medium">{doc.file_type}</span>}
+            </div>
+            {doc.description && <p className="text-xs text-muted-foreground mt-2 line-clamp-2">{doc.description}</p>}
+            <div className="flex items-center justify-between mt-3">
+              <span className="text-[10px] text-muted-foreground">{doc.download_count || 0} downloads</span>
+              <div className="flex gap-1">
+                {doc.file_url && (
+                  <Button variant="ghost" size="sm" className="text-muted-foreground h-7 text-xs" onClick={() => setPreview(true)}>
+                    <Eye className="w-3.5 h-3.5 mr-1" /> Preview
+                  </Button>
+                )}
+                <Button variant="ghost" size="sm" className="text-primary h-7 text-xs" onClick={handleDownload}>
+                  <Download className="w-3.5 h-3.5 mr-1" /> Download
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { Megaphone, Pin, Search } from "lucide-react";
+import { Megaphone, Pin, Search, X as XIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import PageHeader from "@/components/shared/PageHeader";
@@ -76,35 +76,47 @@ export default function AnnouncementCenter() {
 }
 
 function AnnouncementCard({ announcement: a }) {
-  const [expanded, setExpanded] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
-    <div className="bg-card rounded-xl border border-border p-5 hover:shadow-sm transition-all">
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 flex-wrap mb-2">
-            <StatusBadge status={a.category} />
-            <StatusBadge status={a.priority} />
-            {a.is_pinned && (
-              <span className="text-[10px] font-bold text-knpi-maroon bg-red-50 px-2 py-0.5 rounded-full uppercase">
-                Pinned
-              </span>
-            )}
-            <span className="text-xs text-muted-foreground">
-              {new Date(a.created_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-            </span>
+    <>
+      {open && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setOpen(false)}>
+          <div className="bg-card rounded-2xl border border-border p-6 max-w-2xl w-full shadow-xl max-h-[80vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex flex-wrap gap-2">
+                <StatusBadge status={a.category} />
+                <StatusBadge status={a.priority} />
+                {a.is_pinned && <span className="text-[10px] font-bold text-knpi-maroon bg-red-50 px-2 py-0.5 rounded-full uppercase">Pinned</span>}
+              </div>
+              <button onClick={() => setOpen(false)} className="p-1 hover:bg-muted rounded-lg ml-2"><XIcon className="w-4 h-4" /></button>
+            </div>
+            <h2 className="font-heading font-bold text-xl mb-2">{a.title}</h2>
+            <p className="text-xs text-muted-foreground mb-4">{new Date(a.created_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+            {a.image_url && <img src={a.image_url} alt={a.title} className="w-full rounded-xl mb-4 max-h-64 object-cover" />}
+            <p className="text-sm text-foreground whitespace-pre-wrap leading-relaxed">{a.content}</p>
           </div>
-          <h3 className="font-heading font-semibold text-lg">{a.title}</h3>
-          <p className={`text-sm text-muted-foreground mt-2 whitespace-pre-wrap ${expanded ? '' : 'line-clamp-3'}`}>
-            {a.content}
-          </p>
-          {a.content?.length > 200 && (
-            <button onClick={() => setExpanded(!expanded)} className="text-primary text-sm font-medium mt-1 hover:underline">
-              {expanded ? "Show less" : "Read more"}
-            </button>
-          )}
+        </div>
+      )}
+      <div className="bg-card rounded-xl border border-border p-5 hover:shadow-sm transition-all cursor-pointer" onClick={() => setOpen(true)}>
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 flex-wrap mb-2">
+              <StatusBadge status={a.category} />
+              <StatusBadge status={a.priority} />
+              {a.is_pinned && (
+                <span className="text-[10px] font-bold text-knpi-maroon bg-red-50 px-2 py-0.5 rounded-full uppercase">Pinned</span>
+              )}
+              <span className="text-xs text-muted-foreground">
+                {new Date(a.created_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+              </span>
+            </div>
+            <h3 className="font-heading font-semibold text-lg">{a.title}</h3>
+            <p className="text-sm text-muted-foreground mt-2 line-clamp-3">{a.content}</p>
+            <span className="text-primary text-sm font-medium mt-1 inline-block hover:underline">Read more</span>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

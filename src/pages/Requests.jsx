@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
-import { ClipboardList, Plus, Send } from "lucide-react";
+import { ClipboardList, Plus, Send, Eye, X as XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,6 +18,7 @@ export default function Requests() {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [detailRequest, setDetailRequest] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({ title: "", description: "", type: "certificate", priority: "medium" });
 
@@ -103,10 +104,43 @@ export default function Requests() {
         </Dialog>
       </PageHeader>
 
+      {detailRequest && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setDetailRequest(null)}>
+          <div className="bg-card rounded-2xl border border-border p-6 max-w-lg w-full shadow-xl" onClick={e => e.stopPropagation()}>
+            <div className="flex items-start justify-between mb-4">
+              <h2 className="font-heading font-bold text-lg">{detailRequest.title}</h2>
+              <button onClick={() => setDetailRequest(null)} className="p-1 hover:bg-muted rounded-lg"><XIcon className="w-4 h-4" /></button>
+            </div>
+            <div className="flex flex-wrap gap-2 mb-4">
+              <StatusBadge status={detailRequest.status} />
+              <StatusBadge status={detailRequest.type} />
+              <StatusBadge status={detailRequest.priority} />
+            </div>
+            {detailRequest.description && (
+              <div className="mb-4">
+                <p className="text-xs font-semibold uppercase text-muted-foreground mb-1">Description</p>
+                <p className="text-sm whitespace-pre-wrap">{detailRequest.description}</p>
+              </div>
+            )}
+            <div className="grid grid-cols-2 gap-3 text-sm mb-4">
+              <div><p className="text-xs uppercase text-muted-foreground font-semibold">Submitted by</p><p>{detailRequest.requester_name}</p></div>
+              <div><p className="text-xs uppercase text-muted-foreground font-semibold">Date</p><p>{new Date(detailRequest.created_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p></div>
+              {detailRequest.requester_email && <div className="col-span-2"><p className="text-xs uppercase text-muted-foreground font-semibold">Email</p><p>{detailRequest.requester_email}</p></div>}
+            </div>
+            {detailRequest.admin_notes && (
+              <div className="bg-secondary rounded-lg p-4">
+                <p className="text-xs font-bold uppercase text-muted-foreground mb-1">Admin Response</p>
+                <p className="text-sm">{detailRequest.admin_notes}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {requests.length > 0 ? (
         <div className="space-y-3">
           {requests.map(r => (
-            <div key={r.id} className="bg-card rounded-xl border border-border p-5 hover:shadow-sm transition-all">
+            <div key={r.id} className="bg-card rounded-xl border border-border p-5 hover:shadow-sm transition-all cursor-pointer" onClick={() => setDetailRequest(r)}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 flex-wrap mb-1">
@@ -121,12 +155,7 @@ export default function Requests() {
                     {r.requester_name && ` by ${r.requester_name}`}
                   </p>
                 </div>
-                {r.admin_notes && (
-                  <div className="bg-secondary rounded-lg p-3 text-sm max-w-xs">
-                    <p className="text-[10px] uppercase font-bold text-muted-foreground mb-1">Admin Response</p>
-                    <p className="text-secondary-foreground">{r.admin_notes}</p>
-                  </div>
-                )}
+                <Eye className="w-4 h-4 text-muted-foreground shrink-0" />
               </div>
             </div>
           ))}

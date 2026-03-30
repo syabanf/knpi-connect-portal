@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
-import { User, Mail, Phone, MapPin, Building, Briefcase, Edit, Save, X } from "lucide-react";
+import { User, Mail, Phone, MapPin, Building, Briefcase, Edit, Save, X, Calendar, Hash, Star } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -97,6 +98,19 @@ export default function MemberProfile() {
               <div><Label>Full Name</Label><Input value={form.full_name || ""} onChange={e => setForm({ ...form, full_name: e.target.value })} /></div>
               <div><Label>Email</Label><Input value={form.email || ""} onChange={e => setForm({ ...form, email: e.target.value })} type="email" /></div>
               <div><Label>Phone</Label><Input value={form.phone || ""} onChange={e => setForm({ ...form, phone: e.target.value })} /></div>
+              <div><Label>Member ID</Label><Input value={form.member_id || ""} onChange={e => setForm({ ...form, member_id: e.target.value })} /></div>
+              <div>
+                <Label>Membership Type</Label>
+                <Select value={form.membership_type || "regular"} onValueChange={v => setForm({ ...form, membership_type: v })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="regular">Regular</SelectItem>
+                    <SelectItem value="premium">Premium</SelectItem>
+                    <SelectItem value="honorary">Honorary</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div><Label>Join Date</Label><Input value={form.join_date || ""} onChange={e => setForm({ ...form, join_date: e.target.value })} type="date" /></div>
               <div><Label>Occupation</Label><Input value={form.occupation || ""} onChange={e => setForm({ ...form, occupation: e.target.value })} /></div>
               <div><Label>Organization</Label><Input value={form.organization || ""} onChange={e => setForm({ ...form, organization: e.target.value })} /></div>
               <div><Label>City</Label><Input value={form.city || ""} onChange={e => setForm({ ...form, city: e.target.value })} /></div>
@@ -107,6 +121,9 @@ export default function MemberProfile() {
             <div className="grid sm:grid-cols-2 gap-6">
               <ProfileField icon={Mail} label="Email" value={data.email} />
               <ProfileField icon={Phone} label="Phone" value={data.phone} />
+              <ProfileField icon={Hash} label="Member ID" value={data.member_id} />
+              <ProfileField icon={Star} label="Membership Type" value={data.membership_type} />
+              <ProfileField icon={Calendar} label="Join Date" value={data.join_date} />
               <ProfileField icon={Briefcase} label="Occupation" value={data.occupation} />
               <ProfileField icon={Building} label="Organization" value={data.organization} />
               <ProfileField icon={MapPin} label="City" value={data.city} />
