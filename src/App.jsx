@@ -5,12 +5,33 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
-// Add page imports here
+
+// Layout
+import DashboardLayout from './components/layout/DashboardLayout';
+
+// Pages
+import Landing from './pages/Landing';
+import MemberDashboard from './pages/MemberDashboard';
+import EventList from './pages/EventList';
+import EventDetail from './pages/EventDetail';
+import DocumentCenter from './pages/DocumentCenter';
+import AnnouncementCenter from './pages/AnnouncementCenter';
+import Requests from './pages/Requests';
+import MemberProfile from './pages/MemberProfile';
+import Analytics from './pages/Analytics';
+
+// Admin Pages
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminMembers from './pages/admin/AdminMembers';
+import AdminEvents from './pages/admin/AdminEvents';
+import AdminDocuments from './pages/admin/AdminDocuments';
+import AdminAnnouncements from './pages/admin/AdminAnnouncements';
+import AdminRequests from './pages/admin/AdminRequests';
+import AdminSettings from './pages/admin/AdminSettings';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
 
-  // Show loading spinner while checking app public settings or auth
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
       <div className="fixed inset-0 flex items-center justify-center">
@@ -19,29 +40,41 @@ const AuthenticatedApp = () => {
     );
   }
 
-  // Handle authentication errors
   if (authError) {
     if (authError.type === 'user_not_registered') {
       return <UserNotRegisteredError />;
     } else if (authError.type === 'auth_required') {
-      // Redirect to login automatically
       navigateToLogin();
       return null;
     }
   }
 
-  // Render the main app
   return (
     <Routes>
-      {/* Add your page Route elements here */}
+      <Route path="/" element={<Landing />} />
+      <Route element={<DashboardLayout />}>
+        <Route path="/dashboard" element={<MemberDashboard />} />
+        <Route path="/events" element={<EventList />} />
+        <Route path="/events/:id" element={<EventDetail />} />
+        <Route path="/documents" element={<DocumentCenter />} />
+        <Route path="/announcements" element={<AnnouncementCenter />} />
+        <Route path="/requests" element={<Requests />} />
+        <Route path="/profile" element={<MemberProfile />} />
+        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/members" element={<AdminMembers />} />
+        <Route path="/admin/events" element={<AdminEvents />} />
+        <Route path="/admin/documents" element={<AdminDocuments />} />
+        <Route path="/admin/announcements" element={<AdminAnnouncements />} />
+        <Route path="/admin/requests" element={<AdminRequests />} />
+        <Route path="/admin/settings" element={<AdminSettings />} />
+      </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
 };
 
-
 function App() {
-
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>

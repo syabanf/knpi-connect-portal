@@ -1,0 +1,95 @@
+{
+  "name": "Member",
+  "type": "object",
+  "properties": {
+    "full_name": {
+      "type": "string",
+      "title": "Full Name"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "title": "Email"
+    },
+    "phone": {
+      "type": "string",
+      "title": "Phone"
+    },
+    "member_id": {
+      "type": "string",
+      "title": "Member ID"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive",
+        "pending",
+        "suspended"
+      ],
+      "title": "Status",
+      "default": "pending"
+    },
+    "membership_type": {
+      "type": "string",
+      "enum": [
+        "regular",
+        "premium",
+        "honorary"
+      ],
+      "title": "Membership Type",
+      "default": "regular"
+    },
+    "join_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Join Date"
+    },
+    "address": {
+      "type": "string",
+      "title": "Address"
+    },
+    "city": {
+      "type": "string",
+      "title": "City"
+    },
+    "occupation": {
+      "type": "string",
+      "title": "Occupation"
+    },
+    "organization": {
+      "type": "string",
+      "title": "Organization"
+    },
+    "bio": {
+      "type": "string",
+      "title": "Bio"
+    },
+    "photo_url": {
+      "type": "string",
+      "title": "Photo URL"
+    },
+    "documents": {
+      "type": "array",
+      "title": "Documents",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "full_name",
+    "email"
+  ]
+}

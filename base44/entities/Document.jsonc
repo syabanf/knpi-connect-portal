@@ -1,0 +1,62 @@
+{
+  "name": "Document",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Title"
+    },
+    "description": {
+      "type": "string",
+      "title": "Description"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "policy",
+        "report",
+        "guideline",
+        "form",
+        "minutes",
+        "general"
+      ],
+      "title": "Category"
+    },
+    "file_url": {
+      "type": "string",
+      "title": "File URL"
+    },
+    "file_type": {
+      "type": "string",
+      "title": "File Type"
+    },
+    "file_size": {
+      "type": "string",
+      "title": "File Size"
+    },
+    "access_level": {
+      "type": "string",
+      "enum": [
+        "public",
+        "members",
+        "admin"
+      ],
+      "title": "Access Level",
+      "default": "members"
+    },
+    "download_count": {
+      "type": "number",
+      "title": "Download Count",
+      "default": 0
+    },
+    "is_pinned": {
+      "type": "boolean",
+      "title": "Pinned",
+      "default": false
+    }
+  },
+  "required": [
+    "title",
+    "file_url"
+  ]
+}

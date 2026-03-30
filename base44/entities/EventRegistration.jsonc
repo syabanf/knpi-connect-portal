@@ -1,0 +1,38 @@
+{
+  "name": "EventRegistration",
+  "type": "object",
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "title": "Event ID"
+    },
+    "member_name": {
+      "type": "string",
+      "title": "Member Name"
+    },
+    "member_email": {
+      "type": "string",
+      "title": "Member Email"
+    },
+    "attendance_status": {
+      "type": "string",
+      "enum": [
+        "registered",
+        "attended",
+        "absent",
+        "cancelled"
+      ],
+      "title": "Attendance Status",
+      "default": "registered"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Notes"
+    }
+  },
+  "required": [
+    "event_id",
+    "member_name",
+    "member_email"
+  ]
+}

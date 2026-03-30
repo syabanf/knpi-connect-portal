@@ -1,0 +1,77 @@
+{
+  "name": "Event",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Title"
+    },
+    "description": {
+      "type": "string",
+      "title": "Description"
+    },
+    "date": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date-time",
+      "title": "End Date"
+    },
+    "location": {
+      "type": "string",
+      "title": "Location"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "seminar",
+        "workshop",
+        "conference",
+        "meeting",
+        "social",
+        "training"
+      ],
+      "title": "Type"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "upcoming",
+        "ongoing",
+        "completed",
+        "cancelled"
+      ],
+      "title": "Status",
+      "default": "upcoming"
+    },
+    "capacity": {
+      "type": "number",
+      "title": "Capacity"
+    },
+    "registered_count": {
+      "type": "number",
+      "title": "Registered Count",
+      "default": 0
+    },
+    "image_url": {
+      "type": "string",
+      "title": "Image URL"
+    },
+    "is_featured": {
+      "type": "boolean",
+      "title": "Featured",
+      "default": false
+    },
+    "organizer": {
+      "type": "string",
+      "title": "Organizer"
+    }
+  },
+  "required": [
+    "title",
+    "date"
+  ]
+}

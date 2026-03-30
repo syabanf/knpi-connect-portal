@@ -1,0 +1,54 @@
+{
+  "name": "Announcement",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Title"
+    },
+    "content": {
+      "type": "string",
+      "title": "Content"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "general",
+        "urgent",
+        "event",
+        "policy",
+        "internal"
+      ],
+      "title": "Category",
+      "default": "general"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "title": "Priority",
+      "default": "medium"
+    },
+    "is_pinned": {
+      "type": "boolean",
+      "title": "Pinned",
+      "default": false
+    },
+    "published": {
+      "type": "boolean",
+      "title": "Published",
+      "default": true
+    },
+    "image_url": {
+      "type": "string",
+      "title": "Image URL"
+    }
+  },
+  "required": [
+    "title",
+    "content"
+  ]
+}

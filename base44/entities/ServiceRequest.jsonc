@@ -1,0 +1,86 @@
+{
+  "name": "ServiceRequest",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Title"
+    },
+    "description": {
+      "type": "string",
+      "title": "Description"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "certificate",
+        "letter",
+        "membership_change",
+        "complaint",
+        "suggestion",
+        "other"
+      ],
+      "title": "Request Type"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "submitted",
+        "in_review",
+        "approved",
+        "rejected",
+        "completed"
+      ],
+      "title": "Status",
+      "default": "submitted"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "title": "Priority",
+      "default": "medium"
+    },
+    "requester_name": {
+      "type": "string",
+      "title": "Requester Name"
+    },
+    "requester_email": {
+      "type": "string",
+      "title": "Requester Email"
+    },
+    "attachments": {
+      "type": "array",
+      "title": "Attachments",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "admin_notes": {
+      "type": "string",
+      "title": "Admin Notes"
+    },
+    "resolved_date": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Resolved Date"
+    }
+  },
+  "required": [
+    "title",
+    "type",
+    "requester_name",
+    "requester_email"
+  ]
+}
