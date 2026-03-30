@@ -55,6 +55,7 @@ const newsImages = [
 ];
 
 export default function Landing() {
+  const navigate = useNavigate();
   const [announcements, setAnnouncements] = useState([]);
   const [events, setEvents] = useState([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
