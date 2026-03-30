@@ -32,6 +32,7 @@ import AdminDocuments from './pages/admin/AdminDocuments';
 import AdminAnnouncements from './pages/admin/AdminAnnouncements';
 import AdminRequests from './pages/admin/AdminRequests';
 import AdminSettings from './pages/admin/AdminSettings';
+import AdminCMS from './pages/admin/AdminCMS';
 
 const PUBLIC_PATHS = ['/', '/event/', '/news/'];
 
@@ -76,6 +77,7 @@ const AuthenticatedApp = () => {
         <Route path="/admin/announcements" element={<AdminAnnouncements />} />
         <Route path="/admin/requests" element={<AdminRequests />} />
         <Route path="/admin/settings" element={<AdminSettings />} />
+        <Route path="/admin/cms" element={<AdminCMS />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>

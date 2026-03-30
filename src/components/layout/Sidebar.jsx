@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import {
   Home, Users, Calendar, FileText, Megaphone, ClipboardList,
-  BarChart3, Settings, ChevronLeft, ChevronRight, Shield, X
+  BarChart3, Settings, ChevronLeft, ChevronRight, Shield, X, Layout
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -22,6 +22,7 @@ const adminLinks = [
   { to: "/admin/announcements", icon: Megaphone, label: "Announcements" },
   { to: "/admin/requests", icon: ClipboardList, label: "Requests" },
   { to: "/analytics", icon: BarChart3, label: "Analytics" },
+  { to: "/admin/cms", icon: Layout, label: "CMS" },
   { to: "/admin/settings", icon: Settings, label: "Settings" },
 ];
 
