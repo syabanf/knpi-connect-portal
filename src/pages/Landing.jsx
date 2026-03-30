@@ -84,7 +84,7 @@ export default function Landing() {
             </motion.div>
             <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={2} className="hidden lg:block">
               <img
-                src="/__generating__/img_40f24e0f5bc5.png"
+                src="https://media.base44.com/images/public/69ca1dd832db930f6890ae13/2835bf37b_generated_ccd98afb.png"
                 alt="KNPI Connect Portal banner"
                 className="rounded-2xl shadow-2xl border border-border"
               />
