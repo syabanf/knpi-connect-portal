@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { ArrowLeft, Calendar, Tag } from "lucide-react";
+import CommentSection from "@/components/shared/CommentSection";
 import { Button } from "@/components/ui/button";
 import StatusBadge from "@/components/shared/StatusBadge";
 
@@ -77,6 +78,7 @@ export default function PublicNewsDetail() {
                 <p className="text-gray-600 leading-relaxed whitespace-pre-wrap text-base">{item.content}</p>
               </div>
             </div>
+            <CommentSection refId={id} refType="news" />
           </div>
 
           <div className="space-y-4">

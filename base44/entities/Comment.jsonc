@@ -1,0 +1,32 @@
+{
+  "name": "Comment",
+  "type": "object",
+  "properties": {
+    "ref_id": {
+      "type": "string",
+      "title": "Reference ID"
+    },
+    "ref_type": {
+      "type": "string",
+      "enum": [
+        "event",
+        "news"
+      ],
+      "title": "Reference Type"
+    },
+    "author_name": {
+      "type": "string",
+      "title": "Author Name"
+    },
+    "content": {
+      "type": "string",
+      "title": "Content"
+    }
+  },
+  "required": [
+    "ref_id",
+    "ref_type",
+    "author_name",
+    "content"
+  ]
+}

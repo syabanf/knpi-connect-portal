@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Calendar, MapPin, Users, Clock, ArrowLeft, UserPlus } from "lucide-react";
+import CommentSection from "@/components/shared/CommentSection";
 import { Button } from "@/components/ui/button";
 import StatusBadge from "@/components/shared/StatusBadge";
 
@@ -79,6 +80,7 @@ export default function PublicEventDetail() {
               <h2 className="font-heading font-bold text-xl text-gray-900 mb-4">About This Event</h2>
               <p className="text-gray-600 leading-relaxed whitespace-pre-wrap">{event.description}</p>
             </div>
+            <CommentSection refId={id} refType="event" />
           </div>
 
           <div className="space-y-4">
